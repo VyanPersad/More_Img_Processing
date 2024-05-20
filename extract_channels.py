@@ -266,6 +266,7 @@ for file in os.listdir('CroppedImgs/'):
     file_path = f'CroppedImgs/{file}'
     img = cv2.imread(file_path)
     gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
     '''
     pixel_list = getRandoPxs(file_path, num_pxs=50)
 
