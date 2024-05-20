@@ -1,0 +1,35 @@
+## Copilot
+Certainly! Here's a Python function that randomly selects a specified number of pixels from an image using the PIL library:
+
+from PIL import Image
+import random
+
+def select_random_pixels(image_path, num_pixels=2):
+    """
+    Randomly selects pixels from an image and returns their RGB values.
+
+    Args:
+        image_path (str): Path to the image file.
+        num_pixels (int): Number of pixels to select (default is 2).
+
+    Returns:
+        list: List of RGB tuples for the selected pixels.
+    """
+    image = Image.open(image_path)
+    image = image.convert("RGB")
+
+    selected_pixels = []
+    for _ in range(num_pixels):
+        x = random.randint(0, image.width - 1)
+        y = random.randint(0, image.height - 1)
+        selected_pixels.append(image.getpixel((x, y)))
+
+    return selected_pixels
+
+# Example usage:
+image_path = "your_image.jpg"
+selected_rgb_values = select_random_pixels(image_path, num_pixels=2)
+for i, rgb in enumerate(selected_rgb_values, start=1):
+    print(f"Pixel {i}: RGB = {rgb}")
+
+Replace "your_image.jpg" with the actual path to your image file. You can call this function with different values for num_pixels to select more or fewer pixels. Let me know if you need further assistance! 😊
