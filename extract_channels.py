@@ -244,6 +244,19 @@ def light_dark(pixel_list):
 
     return normal, hyper        
 
+def avg_colour(img):
+    avg_color_per_row = np.average(img, axis=0)
+    avg_color = np.average(avg_color_per_row, axis=0)
+
+    return avg_color
+
+def rounded(r,g,b):
+    rr=round(r,2)
+    rg=round(g,2)
+    rb=round(b,2)
+
+    return rr,rg,rb
+
 #0<--Blk+++White-->255
 
 hcmyk = ""
@@ -278,10 +291,15 @@ for file in os.listdir('CroppedImgs/'):
     
     otsu_threshold, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    hyper = cv2.bitwise_and(img, img, mask=binary_image)
-    normal = cv2.bitwise_and(img, img, mask=~binary_image)
-    r_min,g_min,b_min = hyper
-    r_max,g_max,b_max = normal
+    normal = cv2.bitwise_and(img, img, mask=binary_image)
+    hyper = cv2.bitwise_and(img, img, mask=~binary_image)
+
+    r,g,b = avg_colour(hyper)
+    r_min,g_min,b_min = rounded(r,g,b,)
+    r,g,b = avg_colour(normal)
+    r_max,g_max,b_max = rounded(r,g,b)
+
+    #print("hyper - ",r_min," ",g_min," ",b_min,"  normal - ",r_max," ",g_max," ",b_max)
 
     hcmyk = rgb_to_cmyk(r_min,g_min,b_min)
     ncmyk = rgb_to_cmyk(r_max,g_max,b_max)
