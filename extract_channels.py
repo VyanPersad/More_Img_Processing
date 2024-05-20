@@ -266,7 +266,7 @@ for file in os.listdir('CroppedImgs/'):
     file_path = f'CroppedImgs/{file}'
     img = cv2.imread(file_path)
     gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
+
     '''
     pixel_list = getRandoPxs(file_path, num_pxs=50)
 
@@ -275,15 +275,13 @@ for file in os.listdir('CroppedImgs/'):
     #print(normal," ", normal[0],normal[1], normal[2])
     
     '''
-
-    # Apply Otsu's thresholding
+    
     otsu_threshold, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    # Separate the foreground and background
     hyper = cv2.bitwise_and(img, img, mask=binary_image)
     normal = cv2.bitwise_and(img, img, mask=~binary_image)
-    r_min,g_min,b_min = normal
-    r_max,g_max,b_max = hyper
+    r_min,g_min,b_min = hyper
+    r_max,g_max,b_max = normal
 
     hcmyk = rgb_to_cmyk(r_min,g_min,b_min)
     ncmyk = rgb_to_cmyk(r_max,g_max,b_max)
