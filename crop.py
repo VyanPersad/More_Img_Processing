@@ -16,8 +16,11 @@ for file in os.listdir('Originals/'):
 
     image = cv2.imread(args["image"])    
     image = cv2.resize(image, (300, 300))
+
     converted = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
     skinMask = cv2.inRange(converted, lower, upper)
+
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
     skinMask = cv2.erode(skinMask, kernel, iterations=2)
     skinMask = cv2.dilate(skinMask, kernel, iterations=2)
@@ -53,7 +56,15 @@ for file in os.listdir('Originals/'):
     cv2.drawContours(largest_contour_mask, [largest_contour], 0, 255, thickness=cv2.FILLED)
 
     # Apply the mask to the original image
-    largest_contour_image = cv2.bitwise_and(image, image, mask=largest_contour_mask)
+    largest_contour_image = cv2.bitwise_and(image, image, mask=largest_contour_mask) 
+    #Shadow Mask
+    converted_c = cv2.cvtColor(largest_contour_image, cv2.COLOR_BGR2HSV)
+    lshad = np.array([0, 0, 0], dtype="uint8")
+    ushad = np.array([180, 50, 15], dtype="uint8")
+    shadow_mask = cv2.inRange(converted_c, lshad, ushad)
+    img_wo_shadow = cv2.bitwise_and(largest_contour_image, largest_contour_image, mask=shadow_mask)
+    
     base_name = file.split(".")[0]
     #This specifically writes the image to a file called skin1.png
     cv2.imwrite(f'CroppedImgs/{base_name}_C.png',largest_contour_image)
+    cv2.imwrite(f'Cropped_wo_Shadows/{base_name}_C.png',img_wo_shadow)
