@@ -62,7 +62,8 @@ for file in os.listdir('Originals/'):
     lshad = np.array([0, 0, 0], dtype="uint8")
     ushad = np.array([180, 50, 15], dtype="uint8")
     shadow_mask = cv2.inRange(converted_c, lshad, ushad)
-    img_wo_shadow = cv2.bitwise_and(largest_contour_image, largest_contour_image, mask=shadow_mask)
+    #This should show the shadowed regionwith a green tint.
+    img_wo_shadow = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
     
     base_name = file.split(".")[0]
     #This specifically writes the image to a file called skin1.png
