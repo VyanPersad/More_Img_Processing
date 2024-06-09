@@ -3,6 +3,16 @@ import numpy as np
 import argparse
 import cv2
 
+def shadowMsk(image):
+    #Shadow Mask
+    converted_c = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lshad = np.array([0, 0, 0], dtype="uint8")
+    ushad = np.array([180, 50, 15], dtype="uint8")
+    shadow_mask = cv2.inRange(converted_c, lshad, ushad)
+    #This should show the shadowed region with a green tint.
+    img_w_shadow_highlight = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
+    return img_w_shadow_highlight
+
 fcount = 0
 
 for file in os.listdir('Originals/'):
@@ -57,15 +67,16 @@ for file in os.listdir('Originals/'):
 
     # Apply the mask to the original image
     largest_contour_image = cv2.bitwise_and(image, image, mask=largest_contour_mask) 
+
     #Shadow Mask
-    converted_c = cv2.cvtColor(largest_contour_image, cv2.COLOR_BGR2HSV)
-    lshad = np.array([0, 0, 0], dtype="uint8")
-    ushad = np.array([180, 50, 15], dtype="uint8")
-    shadow_mask = cv2.inRange(converted_c, lshad, ushad)
-    #This should show the shadowed regionwith a green tint.
-    img_wo_shadow = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
+    #converted_c = cv2.cvtColor(largest_contour_image, cv2.COLOR_BGR2HSV)
+    #lshad = np.array([0, 0, 0], dtype="uint8")
+    #ushad = np.array([180, 50, 15], dtype="uint8")
+    #shadow_mask = cv2.inRange(converted_c, lshad, ushad)
+    #This should show the shadowed region with a green tint.
+    #img_wo_shadow = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
     
     base_name = file.split(".")[0]
     #This specifically writes the image to a file called skin1.png
     cv2.imwrite(f'CroppedImgs/{base_name}_C.png',largest_contour_image)
-    cv2.imwrite(f'Cropped_wo_Shadows/{base_name}_C.png',img_wo_shadow)
+    #cv2.imwrite(f'Cropped_wo_Shadows/{base_name}_C.png',img_wo_shadow)

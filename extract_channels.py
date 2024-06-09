@@ -257,6 +257,20 @@ def rounded(r,g,b):
 
     return rr,rg,rb
 
+def write_to_csv(output_file_path, fieldnames, data):
+    
+    file_exists = os.path.exists(output_file_path)
+
+    with open(output_file_path, mode='a', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        
+        # Write header if the file is newly created
+        if not file_exists:
+            writer.writeheader()
+        # Write rows
+        for row in data:
+            writer.writerow(row)
+    
 #0<--Blk+++White-->255
 
 hcmyk = ""
@@ -285,17 +299,17 @@ for file in os.listdir('CroppedImgs/'):
 
     normal, hyper = light_dark(pixel_list)
 
-    #print(normal," ", normal[0],normal[1], normal[2])
+    #print(normal," ", normal[0], normal[1], normal[2])
     
     '''
-    
-    otsu_threshold, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    #otsu threshold seperation of hyper and normal pigmentation   
+    otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
     normal = cv2.bitwise_and(img, img, mask=binary_image)
     hyper = cv2.bitwise_and(img, img, mask=~binary_image)
 
     r,g,b = avg_colour(hyper)
-    r_min,g_min,b_min = rounded(r,g,b,)
+    r_min,g_min,b_min = rounded(r,g,b)
     r,g,b = avg_colour(normal)
     r_max,g_max,b_max = rounded(r,g,b)
 
@@ -322,22 +336,18 @@ for file in os.listdir('CroppedImgs/'):
     hxyz = rgbToXyz(r_min,g_min,b_min)
     nxyz = rgbToXyz(r_max,g_max,b_max)
 
-    data = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 
-    'HHSV':hhsv, 'NHSV':nhsv, 'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 
-    'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
+    allData = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 'HHSV':hhsv, 'NHSV':nhsv, 
+                'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
 
-    header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 
-    'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
-    csv_file_path = 'data_channels.csv'
-    file_exists = os.path.exists(csv_file_path)
+    hyperData = [{'HCMYK': hcmyk, 'HLAB': hlab,'HHSV':hhsv, 'HLUM':hlum,'HTEMP':htemp, 'HRYB': hryb, 'HXYZ': hxyz}]
+    normalData = [{'NCMYK': ncmyk,'NLAB': nlab,'NHSV':nhsv, 'NLUM':nlum,'NTEMP':ntemp, 'NRYB': nryb, 'NXYZ':nxyz}]
 
-    with open(csv_file_path, mode='a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=header_names)
-        
-        # Write header if the file is newly created
-        if not file_exists:
-            writer.writeheader()
-        
-        # Write rows
-        for row in data:
-            writer.writerow(row)
+
+    header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
+    hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
+    normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
+
+    write_to_csv('hyperData_channels.csv', hyper_names, hyperData)
+    write_to_csv('normalData_channels.csv', normal_names, normalData)
+
+   
