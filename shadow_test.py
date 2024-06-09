@@ -4,6 +4,16 @@ import argparse
 import cv2
 import matplotlib.pyplot as plt
 
+def shadowMsk(image):
+    #Shadow Mask
+    converted_c = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lshad = np.array([0, 0, 0], dtype="uint8")
+    ushad = np.array([180, 50, 15], dtype="uint8")
+    shadow_mask = cv2.inRange(converted_c, lshad, ushad)
+    #This should show the shadowed region with a green tint.
+    img_w_shadow_highlight = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
+    return img_w_shadow_highlight
+
 fcount = 0
 
 for file in os.listdir('Originals/'):
@@ -14,18 +24,10 @@ for file in os.listdir('Originals/'):
     args = vars(ap.parse_args())
 
     image = cv2.imread(args["image"])    
-    #image = cv2.resize(image, (300, 300))
+    image = cv2.resize(image, (300, 300))
 
-    converted = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    
-    #Shadow Mask
-    converted_c = cv2.cvtColor(converted, cv2.COLOR_BGR2HSV)
-    lshad = np.array([0, 0, 0], dtype="uint8")
-    ushad = np.array([232, 24, 17], dtype="uint8")
-    shadow_mask = cv2.inRange(converted_c, lshad, ushad)
-    #This should show the shadowed regionwith a green tint.
-    img_w_shadow_highlight = cv2.bitwise_and(converted, converted, mask=~shadow_mask)
-    
+    img_w_shadow_highlight = shadowMsk(image)
+
     base_name = file.split(".")[0]
     #This specifically writes the image to a file called skin1.png
     plt.imshow(img_w_shadow_highlight,cmap='gray')
