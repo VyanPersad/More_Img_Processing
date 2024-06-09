@@ -11,25 +11,24 @@ def shadowMsk(image):
     ushad = np.array([180, 50, 15], dtype="uint8")
     shadow_mask = cv2.inRange(converted_c, lshad, ushad)
     #This should show the shadowed region with a green tint.
-    img_w_shadow_highlight = cv2.bitwise_and(converted_c, converted_c, mask=~shadow_mask)
+    img_w_shadow_highlight = cv2.bitwise_and(image, image, mask=~shadow_mask)
     return img_w_shadow_highlight
 
 fcount = 0
 
-for file in os.listdir('Originals/'):
+for file in os.listdir('CroppedImgs/'):
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", help="Path to the image file", default=f'Originals/{file}')
+    ap.add_argument("-i", "--image", help="Path to the image file", default=f'CroppedImgs/{file}')
                     
     args = vars(ap.parse_args())
 
     image = cv2.imread(args["image"])    
-    image = cv2.resize(image, (300, 300))
+    #image = cv2.resize(image, (300, 300))
 
     img_w_shadow_highlight = shadowMsk(image)
 
     base_name = file.split(".")[0]
-    #This specifically writes the image to a file called skin1.png
-    plt.imshow(img_w_shadow_highlight,cmap='gray')
+    plt.imshow(img_w_shadow_highlight)
     plt.show()
-    #cv2.imwrite(f'CroppedImgs/{base_name}_C.png',img_w_shadow_highlight)
+    cv2.imwrite(f'Cropped_wo_Shadows/{base_name}_C.png',img_w_shadow_highlight)
