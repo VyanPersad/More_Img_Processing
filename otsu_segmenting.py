@@ -105,6 +105,7 @@ for file in os.listdir('CroppedImgs/'):
     # C +ve -> conservative threshold, shift toward darker region
     # C -ve -> permissive threshold, shift toward lighter region
     otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
     block_size = 11
     C = 0
     binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
@@ -165,8 +166,7 @@ for img in img_files_adaptive_otsu:
             plot[i,j].set_title(img_title[j])
 
     plt.show()
-
-
+'''
 
 for img in img_files_adaptive_otsu:
     customPlot[0,0].imshow(img_files_adaptive_otsu[2])
@@ -175,12 +175,11 @@ for img in img_files_adaptive_otsu:
     customPlot[0,1].set_title(img_title[3])
 
     plt.show()
-'''
+
 for img in img_files_normal_otsu:
     customPlot[0,0].imshow(img_files_normal_otsu[2])
     customPlot[0,0].set_title(img_title[2])
     customPlot[0,1].imshow(img_files_normal_otsu[3])
     customPlot[0,1].set_title(img_title[3])
-
 
 plt.show()    
