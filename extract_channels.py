@@ -305,8 +305,8 @@ for file in os.listdir('CroppedImgs/'):
     '''
     # otsu threshold seperation of hyper and normal pigmentation   
     otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    # otsu with adaptive thresholding
     
+    # otsu with adaptive thresholding
     # The block_size determines the overall area around the pixel over
     # which the average or weighted average will be calculated.
     # A larger block is good for regions with lighting changes.

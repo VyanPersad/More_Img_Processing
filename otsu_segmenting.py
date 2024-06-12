@@ -74,6 +74,7 @@ def write_to_csv(output_file_path, fieldnames, data):
 #0<--Blk+++White-->255
 img_files_normal_otsu = []
 img_files_adaptive_otsu = []
+imgs_to_disp = []
 img_title = ['Img','Binary','Normal','Hyper']
 #f, plot = plt.subplots(5, 4)
 f, customPlot = plt.subplots(2, 2)
@@ -83,8 +84,7 @@ f, customPlot = plt.subplots(2, 2)
       0 1 2 3 
     0 x x x x  0
     1 x x x x  4
-    2 x x x x  8
-         
+    2 x x x x  8   
 '''
 
 for file in os.listdir('CroppedImgs/'):
@@ -107,7 +107,7 @@ for file in os.listdir('CroppedImgs/'):
     otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     
     block_size = 11
-    C = 0
+    C = 1
     binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
 
     normal = cv2.bitwise_and(img, img, mask=binary_image)
@@ -116,6 +116,14 @@ for file in os.listdir('CroppedImgs/'):
     normal_a = cv2.bitwise_and(img, img, mask=binary_image_w_adapt)
     hyper_a = cv2.bitwise_and(img, img, mask=~binary_image_w_adapt)
     # This builds the number of columns. 
+    
+    imgs_to_disp.append(normal)
+    imgs_to_disp.append(hyper)
+
+    imgs_to_disp.append(normal_a)
+    imgs_to_disp.append(hyper_a)
+
+'''
     img_files_normal_otsu.append(img)
     img_files_normal_otsu.append(binary_image)
     img_files_normal_otsu.append(normal)
@@ -126,7 +134,6 @@ for file in os.listdir('CroppedImgs/'):
     img_files_adaptive_otsu.append(normal_a)
     img_files_adaptive_otsu.append(hyper_a)
 
-'''
 for img in img_files_normal_otsu:
     # This is for the number of rows we have to iterate through
     for i in range(0,5):
@@ -168,18 +175,12 @@ for img in img_files_adaptive_otsu:
     plt.show()
 '''
 
-for img in img_files_adaptive_otsu:
-    customPlot[0,0].imshow(img_files_adaptive_otsu[2])
+for img in imgs_to_disp:
     customPlot[0,0].set_title(img_title[2])
-    customPlot[0,1].imshow(img_files_adaptive_otsu[3])
+    customPlot[0,0].imshow(imgs_to_disp[4])
     customPlot[0,1].set_title(img_title[3])
-
-    plt.show()
-
-for img in img_files_normal_otsu:
-    customPlot[0,0].imshow(img_files_normal_otsu[2])
-    customPlot[0,0].set_title(img_title[2])
-    customPlot[0,1].imshow(img_files_normal_otsu[3])
-    customPlot[0,1].set_title(img_title[3])
+    customPlot[0,1].imshow(imgs_to_disp[5])
+    customPlot[1,0].imshow(imgs_to_disp[6])
+    customPlot[1,1].imshow(imgs_to_disp[7])
 
 plt.show()    
