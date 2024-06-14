@@ -1,0 +1,44 @@
+## Copilot
+Certainly! To get the brightness of the two randomly selected pixels and rank them, follow these steps:
+- Calculate Brightness:
+    - For each pixel, calculate the average brightness using the formula:
+$$ \text{{brightness}} = \frac{{R + G + B}}{3} $$
+    - Alternatively, use the standard luminance formula:
+$$ \text{{Luminance}} = 0.2126R + 0.7152G + 0.0722B $$
+- Rank the Pixels:
+    - Compare the brightness values of the two pixels.
+    - The pixel with the higher brightness value is the brightest.
+Here's an example Python code snippet to achieve this:
+
+from PIL import Image
+import random
+
+def calculate_brightness(pixel):
+    r, g, b = pixel
+    return (r + g + b) // 3
+
+def main(image_path):
+    image = Image.open(image_path)
+    image = image.convert("RGB")
+
+    # Randomly select 2 pixels
+    selected_pixels = []
+    for _ in range(2):
+        x = random.randint(0, image.width - 1)
+        y = random.randint(0, image.height - 1)
+        selected_pixels.append(image.getpixel((x, y)))
+
+    # Calculate brightness for each selected pixel
+    brightness_values = [calculate_brightness(pixel) for pixel in selected_pixels]
+
+    # Rank the pixels
+    brightest_pixel_index = brightness_values.index(max(brightness_values))
+    print(f"Pixel 1 brightness: {brightness_values[0]}")
+    print(f"Pixel 2 brightness: {brightness_values[1]}")
+    print(f"Brightest pixel: Pixel {brightest_pixel_index + 1}")
+
+# Example usage:
+image_path = "your_image.jpg"
+main(image_path)
+
+Replace "your_image.jpg" with the actual path to your image file. This code will calculate the brightness and rank the pixels accordingly. Let me know if you need further assistance! 😊

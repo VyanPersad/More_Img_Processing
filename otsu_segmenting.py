@@ -123,6 +123,16 @@ for file in os.listdir('CroppedImgs/'):
     imgs_to_disp.append(normal_a)
     imgs_to_disp.append(hyper_a)
 
+for img in imgs_to_disp:
+    customPlot[0,0].set_title(img_title[2])
+    customPlot[0,0].imshow(imgs_to_disp[8])
+    customPlot[0,1].set_title(img_title[3])
+    customPlot[0,1].imshow(imgs_to_disp[9])
+    customPlot[1,0].imshow(imgs_to_disp[10])
+    customPlot[1,1].imshow(imgs_to_disp[11])
+
+plt.show()    
+
 '''
     img_files_normal_otsu.append(img)
     img_files_normal_otsu.append(binary_image)
@@ -174,13 +184,3 @@ for img in img_files_adaptive_otsu:
 
     plt.show()
 '''
-
-for img in imgs_to_disp:
-    customPlot[0,0].set_title(img_title[2])
-    customPlot[0,0].imshow(imgs_to_disp[4])
-    customPlot[0,1].set_title(img_title[3])
-    customPlot[0,1].imshow(imgs_to_disp[5])
-    customPlot[1,0].imshow(imgs_to_disp[6])
-    customPlot[1,1].imshow(imgs_to_disp[7])
-
-plt.show()    

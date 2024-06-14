@@ -1,0 +1,28 @@
+## Copilot
+Certainly! To modify the pixel selection function and exclude wholly black and white pixels, we'll adapt the code snippet. We'll randomly select pixels while ensuring they are not completely black or white. Here's the updated function:
+
+from PIL import Image
+import random
+
+def select_non_black_white_pixels(image_path, num_pixels=2):
+    im = Image.open(image_path)
+    im = im.convert("RGB")
+
+    selected_pixels = []
+    while len(selected_pixels) < num_pixels:
+        x = random.randint(0, im.width - 1)
+        y = random.randint(0, im.height - 1)
+        pixel = im.getpixel((x, y))
+        # Exclude black (0, 0, 0) and white (255, 255, 255) pixels
+        if pixel != (0, 0, 0) and pixel != (255, 255, 255):
+            selected_pixels.append(pixel)
+
+    return selected_pixels
+
+# Example usage:
+image_path = "your_image.jpg"
+selected_rgb_values = select_non_black_white_pixels(image_path, num_pixels=2)
+for i, rgb in enumerate(selected_rgb_values, start=1):
+    print(f"Pixel {i}: RGB = {rgb}")
+
+Replace "your_image.jpg" with your actual image file path. Now the function will exclude wholly black and white pixels when randomly selecting them. Let me know if you need further assistance! 😊

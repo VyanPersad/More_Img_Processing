@@ -305,16 +305,15 @@ for file in os.listdir('CroppedImgs/'):
     '''
     # otsu threshold seperation of hyper and normal pigmentation   
     otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    # otsu with adaptive thresholding
-    # The block_size determines the overall area around the pixel over
+    # otsu with adaptive thresholding.
+    # The block_size determines the overall area around the pixel over.
     # which the average or weighted average will be calculated.
     # A larger block is good for regions with lighting changes.
     # A smaller block is good for high or fine detail regions.
-    # The C param thast is sibtracted from the average
+    # The C param thast is sibtracted from the average.
     # Allows for adjustement of the threshold value based on brightness.
-    # C +ve -> conservative threshold, shift toward darker region
-    # C -ve -> permissive threshold, shift toward lighter region
+    # C +ve -> conservative threshold, shift toward darker region.
+    # C -ve -> permissive threshold, shift toward lighter region.
     block_size = 11
     C = 2
     binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
@@ -355,7 +354,6 @@ for file in os.listdir('CroppedImgs/'):
 
     hyperData = [{'HCMYK': hcmyk, 'HLAB': hlab,'HHSV':hhsv, 'HLUM':hlum,'HTEMP':htemp, 'HRYB': hryb, 'HXYZ': hxyz}]
     normalData = [{'NCMYK': ncmyk,'NLAB': nlab,'NHSV':nhsv, 'NLUM':nlum,'NTEMP':ntemp, 'NRYB': nryb, 'NXYZ':nxyz}]
-
 
     header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
     hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]

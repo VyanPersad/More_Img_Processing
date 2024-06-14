@@ -1,0 +1,26 @@
+## Copilot
+Certainly! To modify the function so that no black pixels are selected, we can adapt the code snippet. Instead of appending black pixels unconditionally, we'll only append them if the current pixel is not black. Here's the updated function:
+
+from PIL import Image
+
+def select_non_black_pixels(image_path, num_pixels=2):
+    im = Image.open(image_path)
+    im = im.convert("RGB")
+
+    selected_pixels = []
+    for _ in range(num_pixels):
+        x = random.randint(0, im.width - 1)
+        y = random.randint(0, im.height - 1)
+        pixel = im.getpixel((x, y))
+        if pixel != (0, 0, 0):  # Only select non-black pixels
+            selected_pixels.append(pixel)
+
+    return selected_pixels
+
+# Example usage:
+image_path = "your_image.jpg"
+selected_rgb_values = select_non_black_pixels(image_path, num_pixels=2)
+for i, rgb in enumerate(selected_rgb_values, start=1):
+    print(f"Pixel {i}: RGB = {rgb}")
+
+Replace "your_image.jpg" with your actual image file path. Now the function will exclude black pixels when randomly selecting them. Let me know if you need further assistance! 😊

@@ -1,0 +1,30 @@
+## Copilot
+Certainly! Otsu's thresholding is a technique for automatic image thresholding. It determines an optimal threshold value to binarize an image based on pixel intensities. Here's how you can apply Otsu's method to segment a colored image into two zones (foreground and background) in Python:
+
+import cv2
+import numpy as np
+
+# Load your colored image (replace 'image_path' with the actual path)
+image = cv2.imread('image_path')
+
+# Convert the image to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Apply Otsu's thresholding
+otsu_threshold, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+# Separate the foreground and background
+foreground = cv2.bitwise_and(image, image, mask=binary_image)
+background = cv2.bitwise_and(image, image, mask=~binary_image)
+
+# Display the results
+cv2.imshow("Foreground", foreground)
+cv2.imshow("Background", background)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+Make sure to replace 'image_path' with the actual path to your colored image. This code will display the foreground and background segments of the image based on Otsu's thresholding. If you have any other questions or need further assistance, feel free to ask! 😊
+References:
+- LearnOpenCV: Otsu’s Thresholding with OpenCV
+- Stack Overflow: Crop colour image according to OTSU threshold
+- GeeksforGeeks: Python Thresholding Techniques using OpenCV (Set-3: Otsu Thresholding)  .
