@@ -15,7 +15,7 @@ def shadowMsk(image, upper=[180,50,15], lower=[0,0,0]):
 
     return img_w_shadow_highlight
 
-def HSVskinMask(image, upper, lower):
+def HSVskinMask(image, upper=[20,255,255], lower=[3,15,10]):
     #Upper - 20, 255, 255
     #lower - 3, 15, 10
     lower = np.array(lower, dtype="uint8")

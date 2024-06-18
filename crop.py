@@ -24,6 +24,7 @@ for file in os.listdir('Originals/'):
     crppd_img_HSV_2 = HSVskinMask(image,[25,255,255],[0,40,0])
 
     crppd_img_YCb = YCbCrskinMask(image,[255,173,133],[0,138,67])
+    #This way only the 4 imgs for this one image is stored. 
     imgArray = []
     imgArray.append(image)
     imgArray.append(crppd_img_HSV_1)
@@ -48,11 +49,6 @@ for file in os.listdir('Originals/'):
       #cv2 works in BGR plt works in RGB hence the conversion 
       for j in range(4):
         customPlot[j].imshow(cv2.cvtColor(imgArray[j], cv2.COLOR_BGR2RGB))
-          
-    #customPlot[0].imshow(cv2.cvtColor(imgArray[0], cv2.COLOR_BGR2RGB))
-    #customPlot[1].imshow(cv2.cvtColor(imgArray[1], cv2.COLOR_BGR2RGB))
-    #customPlot[2].imshow(cv2.cvtColor(imgArray[2], cv2.COLOR_BGR2RGB))
-    #customPlot[3].imshow(cv2.cvtColor(imgArray[3], cv2.COLOR_BGR2RGB))
       
     plt.tight_layout()
     
