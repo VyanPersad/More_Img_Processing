@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 
 def shadowMsk(image, upper=[180,50,15], lower=[0,0,0]):
     #Shadow Mask
