@@ -3,23 +3,21 @@ import numpy as np
 import argparse
 import cv2
 import matplotlib.pyplot as plt
-from maskFunctions import *
-from fileFunctions import *
+from Functions.maskFunctions import *
+from Functions.fileFunctions import *
 
-for file in os.listdir('Originals/'):
-    # construct the argument parse and parse the arguments
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", help="path to the image file", default=f'Originals/{file}')                
-    args = vars(ap.parse_args())
+filepath = 'Originals'
 
-    image = cv2.imread(args["image"]) 
-    image = cv2.resize(image, (300, 300))
+for file in os.listdir(filepath):
+
+    image = readFromFile(filepath, file)
     image_LAB = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     imgArray = []
 
     LAB_Contrast = []
     LAB_Contrast.append(image)
     alpha = [1, 1.5, 2.0, 2.5]
+    
     for i in range(4):
         lab_img = cv2.convertScaleAbs(image_LAB, alpha[i])
         LAB_Contrast.append(lab_img)

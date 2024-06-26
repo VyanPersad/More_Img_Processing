@@ -4,8 +4,8 @@ import numpy as np
 import csv
 import random
 import math
-from PIL import Image
-import matplotlib.pyplot as plt
+from Functions.fileFunctions import write_to_csv
+
 
 RGB_SCALE = 255
 CMYK_SCALE = 100
@@ -257,20 +257,6 @@ def rounded(r,g,b):
     rb=round(b,2)
 
     return rr,rg,rb
-
-def write_to_csv(output_file_path, fieldnames, data):
-    
-    file_exists = os.path.exists(output_file_path)
-
-    with open(output_file_path, mode='a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        
-        # Write header if the file is newly created
-        if not file_exists:
-            writer.writeheader()
-        # Write rows
-        for row in data:
-            writer.writerow(row)
     
 #0<--Blk+++White-->255
 

@@ -45,17 +45,34 @@ def writeImgTofile(inputFilename,destFolderPath,fileSuffix,fileType,image):
     cv2.imwrite(f'{destFolderPath}/{base_name}_{fileSuffix}.{fileType}',image)
 
 def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
+
     makeFolder(destFolderPath)
+    
     base_name = file.split(".")[0]
     #This will only produce a single row of images.
+    #The conversion is because cv2 works in BGR
+    #plt works in RGB
     f, filmPlot = plt.subplots(1,Num, figsize=(10,5))
     for i in range(Num):
         filmPlot[i].set_title(ImgTitles[i])
         for j in range(Num):
-            filmPlot[j].imshow(ImgArray[j])
+            filmPlot[j].imshow(cv2.cvtColor(ImgArray[j], cv2.COLOR_BGR2RGB))
 
     plt.tight_layout()
     plt.savefig(f'{destFolderPath}/filmStrip_{base_name}.png')
     plt.close(f)
 
+def showfilmStripPlot(ImgTitles, ImgArray, Num):
 
+    #This will only produce a single row of images.
+    #The conversion is because cv2 works in BGR
+    #plt works in RGB
+    f, filmPlot = plt.subplots(1,Num, figsize=(10,5))
+    for i in range(Num):
+        filmPlot[i].set_title(ImgTitles[i])
+        for j in range(Num):
+            filmPlot[j].imshow(cv2.cvtColor(ImgArray[j], cv2.COLOR_BGR2RGB))
+
+    plt.tight_layout()
+    plt.show()
+    plt.close(f)

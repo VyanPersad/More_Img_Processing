@@ -3,22 +3,17 @@ import numpy as np
 import argparse
 import cv2
 import matplotlib.pyplot as plt
-from maskFunctions import *
-from fileFunctions import *
+from Functions.maskFunctions import *
+from Functions.fileFunctions import *
 
 f, compPlot = plt.subplots(2, 2)
 hsvCrp = []
 ycbcrCrp = []
 
+filepath = 'Originals/'
 
-for file in os.listdir('Originals/'):
-    # construct the argument parse and parse the arguments
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", help="path to the image file", default=f'Originals/{file}')                
-    args = vars(ap.parse_args())
-
-    image = cv2.imread(args["image"]) 
-    image = cv2.resize(image, (300, 300))
+for file in os.listdir(filepath):
+    image = readFromFile(filepath, file)
 
     crppd_img_HSV_1 = HSVskinMask(image,[20,255,255],[3,15,10])
     crppd_img_HSV_2 = HSVskinMask(image,[25,255,255],[0,40,0])
