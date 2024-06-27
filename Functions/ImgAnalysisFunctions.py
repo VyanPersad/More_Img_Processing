@@ -25,11 +25,19 @@ def grayHistnoBlk(image):
 
 def rgbHist(image):
     rgbArr = []
+    upper=[20,255,255] 
+    lower=[3,15,10]
+    lower = np.array(lower, dtype="uint8")
+    upper = np.array(upper, dtype="uint8")
+
+    converted = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    skinMask = cv2.inRange(converted, lower, upper)
     for i in range(3):
-        hist = cv2.calcHist([image],[i],None,[256],[0,256])
+        hist = cv2.calcHist([image],[i],skinMask,[256],[0,256])
         rgbArr.append(hist)
     
     imgCol = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
     #The second term is an array
     #[0,1,2] = [R,G,B]
     return [imgCol, rgbArr]
@@ -53,5 +61,5 @@ def k_means(image):
     labels = labels.flatten()
     segmented_image = centers[labels.flatten()]
     segmented_image = segmented_image.reshape(image.shape)
-
+    #Remember the center are output as bgr
     return segmented_image, centers

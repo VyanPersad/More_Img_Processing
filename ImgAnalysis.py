@@ -6,43 +6,26 @@ import os
 from Functions.fileFunctions import *
 from Functions.ImgAnalysisFunctions import *
 
-def plot2Img(graphPlot):
-    plt.tight_layout()
-    plt.plot(graphPlot)
-    plt.savefig(graphPlot)
-    plt.show()
-    graphPlotImg = cv2.imread(f'{graphPlot}.png')
-
-    return graphPlotImg
-
 filepath = 'CrppdImg_HSV_Set_1'
-file = 'IR009_HSV_1_C.png'
+file = 'IR075_HSV_1_C.png'
 image = readFromFile(filepath, file)
 
 grayHistogram = grayHistnoBlk(image)
+rgbHistogram = rgbHist(image)
 
-Num = 3
-ImgTitles = ['Image','Crppd Gray','Gray Hist']
+ImgTitles = ['Image','Crppd Gray','Gray Hist','RGB Hist']
 
-img_array = []
-img_array.append(image)
-img_array.append(grayHistogram[1])
-
-histo = grayHistogram[2]
-'''
-plt.tight_layout
-plt.plot(histo)
-plt.savefig('histo.png')
+f, filmPlot = plt.subplots(1,4, figsize=(10,5))
+for i in range (4):
+    filmPlot[i].set_title(ImgTitles[i])
+    if (i < 2):
+        filmPlot[i].imshow(cv2.cvtColor(grayHistogram[i], cv2.COLOR_BGR2RGB))
+    elif (i==2):
+        filmPlot[i].plot(grayHistogram[2], color='black')
+    elif (i==3):
+        colorArr = ['r','g','b']
+        for j in range(3):
+            filmPlot[i].plot(rgbHistogram[1][j], color=colorArr[j])    
+ 
+plt.tight_layout()
 plt.show()
-histImg = cv2.imread('histo.png')
-'''
-histImg = plot2Img(histo)
-
-img_array.append(histImg)
-
-
-showfilmStripPlot(ImgTitles, img_array,3)
-
-
-
-

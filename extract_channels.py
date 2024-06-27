@@ -6,7 +6,6 @@ import random
 import math
 from Functions.fileFunctions import write_to_csv
 
-
 RGB_SCALE = 255
 CMYK_SCALE = 100
 
@@ -257,7 +256,10 @@ def rounded(r,g,b):
     rb=round(b,2)
 
     return rr,rg,rb
-    
+
+def rgb2(func, r1,r2,r3, dataArray):
+    dataArray.append(function(r1,r2,r3))
+    return
 #0<--Blk+++White-->255
 
 hcmyk = ""
@@ -312,8 +314,29 @@ for file in os.listdir('CroppedImgs/'):
     r,g,b = avg_colour(normal)
     r_max,g_max,b_max = rounded(r,g,b)
 
+    center = [[r_min,g_min,b_min],[r_max,g_max,b_max]]
+
     #print("hyper - ",r_min," ",g_min," ",b_min,"  normal - ",r_max," ",g_max," ",b_max)
-    
+    hyperData = []
+    normalData = []
+    for i in range(2):
+        if (i==0):
+            rgb2(rgb_to_cmyk(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToLab(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToHsv(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToLuminance(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToTemperature(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToRyb(center[i][0],center[i][1],center[i][2]), hyperData)
+            rgb2(rgbToXyz(center[i][0],center[i][1],center[i][2]), hyperData)
+        elif( i==1):
+            rgb2(rgb_to_cmyk(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToLab(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToHsv(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToLuminance(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToTemperature(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToRyb(center[i][0],center[i][1],center[i][2]), normalData)
+            rgb2(rgbToXyz(center[i][0],center[i][1],center[i][2]), normalData)
+    '''
     hcmyk = rgb_to_cmyk(r_min,g_min,b_min)
     ncmyk = rgb_to_cmyk(r_max,g_max,b_max)
 
@@ -334,7 +357,7 @@ for file in os.listdir('CroppedImgs/'):
 
     hxyz = rgbToXyz(r_min,g_min,b_min)
     nxyz = rgbToXyz(r_max,g_max,b_max)
-
+  
     allData = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 'HHSV':hhsv, 'NHSV':nhsv, 
                 'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
 
@@ -344,7 +367,7 @@ for file in os.listdir('CroppedImgs/'):
     header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
     hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
     normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
-
+    '''
     write_to_csv('hyperData_channels.csv', hyper_names, hyperData)
     write_to_csv('normalData_channels.csv', normal_names, normalData)
     

@@ -42,8 +42,7 @@ for file in os.listdir(filepath):
     for i in range(4):
       customPlot[i].set_title(img_title[i])
       #cv2 works in BGR plt works in RGB hence the conversion 
-      for j in range(4):
-        customPlot[j].imshow(cv2.cvtColor(imgArray[j], cv2.COLOR_BGR2RGB))
+      customPlot[j].imshow(cv2.cvtColor(imgArray[j], cv2.COLOR_BGR2RGB))
       
     plt.tight_layout()
     

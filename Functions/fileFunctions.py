@@ -55,8 +55,7 @@ def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
     f, filmPlot = plt.subplots(1,Num, figsize=(10,5))
     for i in range(Num):
         filmPlot[i].set_title(ImgTitles[i])
-        for j in range(Num):
-            filmPlot[j].imshow(cv2.cvtColor(ImgArray[j], cv2.COLOR_BGR2RGB))
+        filmPlot[i].imshow(cv2.cvtColor(ImgArray[i], cv2.COLOR_BGR2RGB))
 
     plt.tight_layout()
     plt.savefig(f'{destFolderPath}/filmStrip_{base_name}.png')

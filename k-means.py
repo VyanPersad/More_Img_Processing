@@ -9,14 +9,13 @@ from Functions.ImgAnalysisFunctions import k_means
 
 imgArray = []   
 centerArr = []
-img_title = ['Image','Cropped','k-Means','C1','C2']
+img_title = ['Image','Cropped','k-Means','Hyper','Normal']
 
 filepath = 'Originals'
-file = 'IR022.jpg'
+file = 'IR080.jpg'
 imagebgr = readFromFile(filepath, file)
 
 crppd_img_HSV_1 = HSVskinMask(imagebgr,[20,255,255],[3,15,10])
-
 segmented_crppd, centre = k_means(crppd_img_HSV_1)
 
 #Builds the image array.
@@ -30,5 +29,7 @@ for i in range(2):
 
 # Display the image
 showfilmStripPlot(img_title, imgArray, 5)
+
+
 
 
