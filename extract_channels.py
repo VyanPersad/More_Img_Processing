@@ -5,6 +5,8 @@ import csv
 import random
 import math
 from Functions.fileFunctions import write_to_csv
+from Functions.fileFunctions import readFromFile
+from Functions.ImgAnalysisFunctions import k_means
 
 RGB_SCALE = 255
 CMYK_SCALE = 100
@@ -257,7 +259,7 @@ def rounded(r,g,b):
 
     return rr,rg,rb
 
-def rgb2(func, r1,r2,r3, dataArray):
+def rgb2(function, r1,r2,r3, dataArray):
     dataArray.append(function(r1,r2,r3))
     return
 #0<--Blk+++White-->255
@@ -277,97 +279,44 @@ nryb = ""
 hxyz = ""
 nxyz = ""
 
-for file in os.listdir('CroppedImgs/'):
-        
-    file_path = f'CroppedImgs/{file}'
-    img = cv2.imread(file_path)
-    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+filepath = 'CrppdImg_HSV_Set_1'
 
-    '''
-    pixel_list = getRandoPxs(file_path, num_pxs=50)
-
-    normal, hyper = light_dark(pixel_list)
-
-    #print(normal," ", normal[0], normal[1], normal[2])
+for file in os.listdir(f'{filepath}'):
     
-    '''
-    # otsu threshold seperation of hyper and normal pigmentation   
-    otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    # otsu with adaptive thresholding.
-    # The block_size determines the overall area around the pixel over.
-    # which the average or weighted average will be calculated.
-    # A larger block is good for regions with lighting changes.
-    # A smaller block is good for high or fine detail regions.
-    # The C param thast is sibtracted from the average.
-    # Allows for adjustement of the threshold value based on brightness.
-    # C +ve -> conservative threshold, shift toward darker region.
-    # C -ve -> permissive threshold, shift toward lighter region.
-    block_size = 11
-    C = 2
-    binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
+    imagebgr = readFromFile(filepath, file)   
 
-    normal = cv2.bitwise_and(img, img, mask=binary_image)
-    hyper = cv2.bitwise_and(img, img, mask=~binary_image)
+    segmented_crppd, center = k_means(imagebgr)
 
-    r,g,b = avg_colour(hyper)
-    r_min,g_min,b_min = rounded(r,g,b)
-    r,g,b = avg_colour(normal)
-    r_max,g_max,b_max = rounded(r,g,b)
-
-    center = [[r_min,g_min,b_min],[r_max,g_max,b_max]]
-
-    #print("hyper - ",r_min," ",g_min," ",b_min,"  normal - ",r_max," ",g_max," ",b_max)
     hyperData = []
     normalData = []
     for i in range(2):
         if (i==0):
-            rgb2(rgb_to_cmyk(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToLab(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToHsv(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToLuminance(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToTemperature(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToRyb(center[i][0],center[i][1],center[i][2]), hyperData)
-            rgb2(rgbToXyz(center[i][0],center[i][1],center[i][2]), hyperData)
+            hcmyk = rgb_to_cmyk(center[i][2],center[i][1],center[i][0])
+            hlab = rgbToLab(center[i][2],center[i][1],center[i][0])
+            hhsv = rgbToHsv(center[i][2],center[i][1],center[i][0])
+            hlum = rgbToLuminance(center[i][2],center[i][1],center[i][0])
+            htemp = rgbToTemperature(center[i][2],center[i][1],center[i][0])
+            hryb = rgbToRyb(center[i][2],center[i][1],center[i][0])
+            hxyz = rgbToXyz(center[i][2],center[i][1],center[i][0])
         elif( i==1):
-            rgb2(rgb_to_cmyk(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToLab(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToHsv(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToLuminance(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToTemperature(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToRyb(center[i][0],center[i][1],center[i][2]), normalData)
-            rgb2(rgbToXyz(center[i][0],center[i][1],center[i][2]), normalData)
-    '''
-    hcmyk = rgb_to_cmyk(r_min,g_min,b_min)
-    ncmyk = rgb_to_cmyk(r_max,g_max,b_max)
-
-    hlab = rgbToLab(r_min,g_min,b_min)
-    nlab = rgbToLab(r_max,g_max,b_max)
-
-    hhsv = rgbToHsv(r_min,g_min,b_min)
-    nhsv = rgbToHsv(r_max,g_max,b_max)
-
-    hlum = rgbToLuminance(r_min,g_min,b_min)
-    nlum = rgbToLuminance(r_max,g_max,b_max)
-
-    htemp = rgbToTemperature(r_min,g_min,b_min)
-    ntemp = rgbToTemperature(r_max,g_max,b_max)
-
-    hryb = rgbToRyb(r_min,g_min,b_min)
-    nryb = rgbToRyb(r_max,g_max,b_max)
-
-    hxyz = rgbToXyz(r_min,g_min,b_min)
-    nxyz = rgbToXyz(r_max,g_max,b_max)
+            ncmyk = rgb_to_cmyk(center[i][2],center[i][1],center[i][0])
+            nlab = rgbToLab(center[i][2],center[i][1],center[i][0])
+            nhsv = rgbToHsv(center[i][2],center[i][1],center[i][0])
+            nlum = rgbToLuminance(center[i][2],center[i][1],center[i][0])
+            ntemp = rgbToTemperature(center[i][2],center[i][1],center[i][0])
+            nryb = rgbToRyb(center[i][2],center[i][1],center[i][0])
+            nxyz = rgbToXyz(center[i][2],center[i][1],center[i][0])
   
     allData = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 'HHSV':hhsv, 'NHSV':nhsv, 
                 'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
 
     hyperData = [{'HCMYK': hcmyk, 'HLAB': hlab,'HHSV':hhsv, 'HLUM':hlum,'HTEMP':htemp, 'HRYB': hryb, 'HXYZ': hxyz}]
     normalData = [{'NCMYK': ncmyk,'NLAB': nlab,'NHSV':nhsv, 'NLUM':nlum,'NTEMP':ntemp, 'NRYB': nryb, 'NXYZ':nxyz}]
-
+    
     header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
     hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
     normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
-    '''
+    
     write_to_csv('hyperData_channels.csv', hyper_names, hyperData)
     write_to_csv('normalData_channels.csv', normal_names, normalData)
     

@@ -53,6 +53,7 @@ def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
     #The conversion is because cv2 works in BGR
     #plt works in RGB
     f, filmPlot = plt.subplots(1,Num, figsize=(10,5))
+    plt.suptitle(f'{base_name}', x=0.05, y=0.9, ha='left', va='top')
     for i in range(Num):
         filmPlot[i].set_title(ImgTitles[i])
         filmPlot[i].imshow(cv2.cvtColor(ImgArray[i], cv2.COLOR_BGR2RGB))
@@ -61,17 +62,19 @@ def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
     plt.savefig(f'{destFolderPath}/filmStrip_{base_name}.png')
     plt.close(f)
 
-def showfilmStripPlot(ImgTitles, ImgArray, Num):
+def showfilmStripPlot(ImgTitles, ImgArray, Num, Text, figName='Custom Name'):
 
     #This will only produce a single row of images.
     #The conversion is because cv2 works in BGR
     #plt works in RGB
-    f, filmPlot = plt.subplots(1,Num, figsize=(10,5))
+    f, filmPlot = plt.subplots(1,Num, figsize=(10,5), num = figName)
+    plt.suptitle(f'{figName}', x=0.05, y=0.9, ha='left', va='top')
+    plt.figtext(0.1, 0.05, Text, ha='left', va='bottom')
     for i in range(Num):
         filmPlot[i].set_title(ImgTitles[i])
         for j in range(Num):
             filmPlot[j].imshow(cv2.cvtColor(ImgArray[j], cv2.COLOR_BGR2RGB))
-
+ 
     plt.tight_layout()
     plt.show()
     plt.close(f)
