@@ -4,6 +4,7 @@ import numpy as np
 import csv
 import random
 import math
+from statistics import mean
 from Functions.fileFunctions import write_to_csv
 from Functions.fileFunctions import readFromFile
 from Functions.ImgAnalysisFunctions import k_means
@@ -279,33 +280,52 @@ nryb = ""
 hxyz = ""
 nxyz = ""
 
-filepath = 'CrppdImg_HSV_Set_1'
+filepath = 'OutputFolder\\CrppdImg_HSV_Set_1'
 
-for file in os.listdir(f'{filepath}'):
-    
+for file in os.listdir(f'{filepath}'):    
     imagebgr = readFromFile(filepath, file)   
-
     segmented_crppd, center = k_means(imagebgr)
+    centArr = []
+    # Centre Details
+    for i in range(3):
+        if (mean([center[i][0], center[i][1], center[i][2]]) > 10):
+            centArr.append([center[i][0], center[i][1], center[i][2]])
+
+    if (mean([center[0][0], center[0][1], center[0][2]])<mean([center[1][0], center[1][1], center[1][2]])):  
+        # 0 = Hyper
+        # 1 = Normal  
+        a = 0
+
+    elif(mean([center[1][0], center[1][1], center[1][2]])>mean([center[0][0], center[0][1], center[0][2]])):
+        # 0 = Normal
+        # 1 = Hyper
+        a = 1
 
     hyperData = []
     normalData = []
-    for i in range(2):
-        if (i==0):
-            hcmyk = rgb_to_cmyk(center[i][2],center[i][1],center[i][0])
-            hlab = rgbToLab(center[i][2],center[i][1],center[i][0])
-            hhsv = rgbToHsv(center[i][2],center[i][1],center[i][0])
-            hlum = rgbToLuminance(center[i][2],center[i][1],center[i][0])
-            htemp = rgbToTemperature(center[i][2],center[i][1],center[i][0])
-            hryb = rgbToRyb(center[i][2],center[i][1],center[i][0])
-            hxyz = rgbToXyz(center[i][2],center[i][1],center[i][0])
-        elif( i==1):
-            ncmyk = rgb_to_cmyk(center[i][2],center[i][1],center[i][0])
-            nlab = rgbToLab(center[i][2],center[i][1],center[i][0])
-            nhsv = rgbToHsv(center[i][2],center[i][1],center[i][0])
-            nlum = rgbToLuminance(center[i][2],center[i][1],center[i][0])
-            ntemp = rgbToTemperature(center[i][2],center[i][1],center[i][0])
-            nryb = rgbToRyb(center[i][2],center[i][1],center[i][0])
-            nxyz = rgbToXyz(center[i][2],center[i][1],center[i][0])
+    if (a == 0):
+        j = 0
+        k = 1
+    elif (a == 1):
+        j = 1
+        k = 0
+
+    hcmyk = rgb_to_cmyk(centArr[j][2],centArr[j][1],centArr[j][0])
+    hlab = rgbToLab(centArr[j][2],centArr[j][1],centArr[j][0])
+    hhsv = rgbToHsv(centArr[j][2],centArr[j][1],centArr[j][0])
+    hlum = rgbToLuminance(centArr[j][2],centArr[j][1],centArr[j][0])
+    htemp = rgbToTemperature(centArr[j][2],centArr[j][1],centArr[j][0])
+    hryb = rgbToRyb(centArr[j][2],centArr[j][1],centArr[j][0])
+    hxyz = rgbToXyz(centArr[j][2],centArr[j][1],centArr[j][0])
+
+    ncmyk = rgb_to_cmyk(centArr[k][2],centArr[k][1],centArr[k][0])
+    nlab = rgbToLab(centArr[k][2],centArr[k][1],centArr[k][0])
+    nhsv = rgbToHsv(centArr[k][2],centArr[k][1],centArr[k][0])
+    nlum = rgbToLuminance(centArr[k][2],centArr[k][1],centArr[k][0])
+    ntemp = rgbToTemperature(centArr[k][2],centArr[k][1],centArr[k][0])
+    nryb = rgbToRyb(centArr[k][2],centArr[k][1],centArr[k][0])
+    nxyz = rgbToXyz(centArr[k][2],centArr[k][1],centArr[k][0])
+
   
     allData = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 'HHSV':hhsv, 'NHSV':nhsv, 
                 'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
