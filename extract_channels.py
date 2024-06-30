@@ -280,23 +280,23 @@ nryb = ""
 hxyz = ""
 nxyz = ""
 
-filepath = 'OutputFolder\\CrppdImg_HSV_Set_1'
+filepath = 'Manual_Crop'
 
 for file in os.listdir(f'{filepath}'):    
     imagebgr = readFromFile(filepath, file)   
-    segmented_crppd, center = k_means(imagebgr)
+    segmented_crppd, center = k_means(imagebgr, 2)
     centArr = []
     # Centre Details
     for i in range(3):
         if (mean([center[i][0], center[i][1], center[i][2]]) > 10):
             centArr.append([center[i][0], center[i][1], center[i][2]])
 
-    if (mean([center[0][0], center[0][1], center[0][2]])<mean([center[1][0], center[1][1], center[1][2]])):  
+    if (mean([centArr[0][0], centArr[0][1], centArr[0][2]])<mean([centArr[1][0], centArr[1][1], centArr[1][2]])):  
         # 0 = Hyper
         # 1 = Normal  
         a = 0
 
-    elif(mean([center[1][0], center[1][1], center[1][2]])>mean([center[0][0], center[0][1], center[0][2]])):
+    elif(mean([centArr[0][0], centArr[0][1], centArr[0][2]])>mean([centArr[1][0], centArr[1][1], centArr[1][2]])):
         # 0 = Normal
         # 1 = Hyper
         a = 1
@@ -337,7 +337,7 @@ for file in os.listdir(f'{filepath}'):
     hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
     normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
     
-    write_to_csv('hyperData_channels.csv', hyper_names, hyperData)
-    write_to_csv('normalData_channels.csv', normal_names, normalData)
+    write_to_csv('hyperData_channels_frm_ Man_Crp.csv', hyper_names, hyperData)
+    write_to_csv('normalData_channels_frm_ Man_Crp.csv', normal_names, normalData)
     
    

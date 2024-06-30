@@ -8,38 +8,49 @@ from Functions.fileFunctions import *
 from Functions.maskFunctions import HSVskinMask
 from Functions.ImgAnalysisFunctions import k_means
 
-centerArr = []
-img_title = ['Image','Cropped','k-Means','Hyper','Normal']
-
-filepath = 'Originals'
-file = 'IR018.jpg'
+img_title = ['Image','k-Means','Hyper','Normal']
+filepath = 'Manual_Crop'
+#file = 'IR018.jpg'
 
 def k_meansFolder(filepath):
     for file in os.listdir(filepath):
         imagebgr = readFromFile(filepath, file)
 
         crppd_img_HSV_1 = HSVskinMask(imagebgr,[20,255,255],[3,15,10])
-        segmented_crppd, centre = k_means(crppd_img_HSV_1)
+        segmented_crppd, centre = k_means(crppd_img_HSV_1,2)
 
         imgArray = [] 
         #Builds the image array.
         imgArray.append(imagebgr)
-        imgArray.append(crppd_img_HSV_1)
+        #imgArray.append(crppd_img_HSV_1)
         imgArray.append(segmented_crppd)
-        for i in range(3):
-            image_pyplot = np.zeros((1, 1, 3), dtype=np.uint8)
-            if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10):
-                image_pyplot[0, 0] = (centre[i][0], centre[i][1], centre[i][2]) 
-                imgArray.append(image_pyplot)
+        centArr = []
+        for i in range(3):          
+            if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10): 
+                centArr.append([centre[i][0], centre[i][1], centre[i][2]])
 
-        # Centre Details
-        centreDeets = f' C1-BGR- {centre[0][0], centre[0][1], centre[0][2]} \
-        \n C2-BGR- {centre[1][0], centre[1][1], centre[1][2]} \
-        \n C3-BGR- {centre[2][0], centre[2][1], centre[2][2]} \
-        '
+        hyper = np.zeros((1, 1, 3), dtype=np.uint8)       
+        normal = np.zeros((1, 1, 3), dtype=np.uint8)       
+
+        if (mean([centArr[0][0], centArr[0][1], centArr[0][2]])<mean([centArr[1][0], centArr[1][1], centArr[1][2]])):  
+            centreDeets = f' C1-BGR-Hyper-{centArr[0][0], centArr[0][1], centArr[0][2]} \
+                \n C2-BGR-Normal-{centArr[1][0], centArr[1][1], centArr[1][2]}'
+            hyper[0, 0] = (centArr[0][0], centArr[0][1], centArr[0][2])
+            normal[0, 0] = (centArr[1][0], centArr[1][1], centArr[1][2])
+            imgArray.append(hyper)
+            imgArray.append(normal)
+
+        elif(mean([centArr[0][0], centArr[0][1], centArr[0][2]])>mean([centArr[1][0], centArr[1][1], centArr[1][2]])):
+            centreDeets = f' C1-BGR-Hyper-{centArr[1][0], centArr[1][1], centArr[1][2]} \
+                \n C2-BGR-Normal-{centArr[0][0], centArr[0][1], centArr[0][2]}'
+            hyper[0, 0] = (centArr[1][0], centArr[1][1], centArr[1][2])
+            normal[0, 0] = (centArr[0][0], centArr[0][1], centArr[0][2])
+            imgArray.append(hyper)
+            imgArray.append(normal)
+
         # Display the image
         #showfilmStripPlot(img_title, imgArray, 5, centreDeets, f'{file.split(".")[0]}')
-        filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
+        filmStripPlot(img_title,imgArray,4,'k-means_M_Crp',file)
 
 def k_meansFile(filepath, file):
     imagebgr = readFromFile(filepath, file)
@@ -63,11 +74,11 @@ def k_meansFile(filepath, file):
         if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10):
             centArr.append([centre[i][0], centre[i][1], centre[i][2]])
 
-    if (mean([centre[0][0], centre[0][1], centre[0][2]])<mean([centre[1][0], centre[1][1], centre[1][2]])):        
+    if (mean([centArr[0][0], centArr[0][1], centArr[0][2]])<mean([centArr[1][0], centArr[1][1], centArr[1][2]])):        
         centreDeets = f' C1-BGR-Hyper-{centArr[0][0], centArr[0][1], centArr[0][2]} \
         \n C2-BGR-Normal-{centArr[1][0], centArr[1][1], centArr[1][2]}'
 
-    elif(mean([centre[0][0], centre[0][1], centre[0][2]])>mean([centre[1][0], centre[1][1], centre[1][2]])):
+    elif(mean([centArr[0][0], centArr[0][1], centArr[0][2]])>mean([centArr[1][0], centArr[1][1], centArr[1][2]])):
         centreDeets = f' C1-BGR-Hyper-{centArr[1][0], centArr[1][1], centArr[1][2]} \
         \n C2-BGR-Normal-{centArr[0][0], centArr[0][1], centArr[0][2]}'
     # Display the image
@@ -75,4 +86,4 @@ def k_meansFile(filepath, file):
     #filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
 
 
-k_meansFile(filepath, file)
+k_meansFolder(filepath)

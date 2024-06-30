@@ -1,6 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from statistics import mean
 
 def grayHist(image):
     imgGr = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -39,7 +40,7 @@ def rgbHist(image):
     imgCol = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     #The second term is an array
-    #[0,1,2] = [R,G,B]
+    #[0,1,2] = [r,g,b]
     return [imgCol, rgbArr]
 
 def plotrgbHist(rgbArray):
@@ -50,7 +51,7 @@ def plotrgbHist(rgbArray):
     plt.tight_layout
     return plt.show()
 
-def k_means(image):
+def k_means(image, k=3):
     pxl_val = image.reshape((-1,3))
     pxl_val = np.float32(pxl_val)
     #print(pxl_val.shape)
@@ -63,3 +64,60 @@ def k_means(image):
     segmented_image = segmented_image.reshape(image.shape)
     #Remember the center are output as bgr
     return segmented_image, centers
+
+def k_meansFolder(filepath):
+    for file in os.listdir(filepath):
+        imagebgr = readFromFile(filepath, file)
+
+        crppd_img_HSV_1 = HSVskinMask(imagebgr,[20,255,255],[3,15,10])
+        segmented_crppd, centre = k_means(crppd_img_HSV_1)
+
+        imgArray = [] 
+        #Builds the image array.
+        imgArray.append(imagebgr)
+        imgArray.append(crppd_img_HSV_1)
+        imgArray.append(segmented_crppd)
+        for i in range(3):
+            image_pyplot = np.zeros((1, 1, 3), dtype=np.uint8)
+            if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10):
+                image_pyplot[0, 0] = (centre[i][0], centre[i][1], centre[i][2]) 
+                imgArray.append(image_pyplot)
+
+        # Centre Details
+
+        # Display the image
+        #showfilmStripPlot(img_title, imgArray, 5, centreDeets, f'{file.split(".")[0]}')
+        filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
+
+def k_meansFile(filepath, file):
+    imagebgr = readFromFile(filepath, file)
+
+    crppd_img_HSV_1 = HSVskinMask(imagebgr,[20,255,255],[3,15,10])
+    segmented_crppd, centre = k_means(crppd_img_HSV_1)
+
+    imgArray = [] 
+    #Builds the image array.
+    imgArray.append(imagebgr)
+    imgArray.append(crppd_img_HSV_1)
+    imgArray.append(segmented_crppd)
+    for i in range(3):
+        image_pyplot = np.zeros((1, 1, 3), dtype=np.uint8)
+        if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10):
+            image_pyplot[0, 0] = (centre[i][0], centre[i][1], centre[i][2]) 
+            imgArray.append(image_pyplot)
+    centArr = []
+    # Centre Details
+    for i in range(3):
+        if (mean([centre[i][0], centre[i][1], centre[i][2]]) > 10):
+            centArr.append([centre[i][0], centre[i][1], centre[i][2]])
+
+    if (mean([centre[0][0], centre[0][1], centre[0][2]])<mean([centre[1][0], centre[1][1], centre[1][2]])):        
+        centreDeets = f' C1-BGR-Hyper-{centArr[0][0], centArr[0][1], centArr[0][2]} \
+        \n C2-BGR-Normal-{centArr[1][0], centArr[1][1], centArr[1][2]}'
+
+    elif(mean([centre[0][0], centre[0][1], centre[0][2]])>mean([centre[1][0], centre[1][1], centre[1][2]])):
+        centreDeets = f' C1-BGR-Hyper-{centArr[1][0], centArr[1][1], centArr[1][2]} \
+        \n C2-BGR-Normal-{centArr[0][0], centArr[0][1], centArr[0][2]}'
+    # Display the image
+    showfilmStripPlot(img_title, imgArray, 5, centreDeets, f'{file.split(".")[0]}')
+    #filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
