@@ -7,7 +7,8 @@ from Functions.maskFunctions import *
 from Functions.fileFunctions import *
 
 filepath = 'Originals/'
-def contrastFolderLoop(filepath):
+destFilePath = ''
+def contrastFolderLoop(filepath, destFilePath):
   for file in os.listdir(filepath):
       image = readFromFile(filepath, file)
 
@@ -33,10 +34,10 @@ def contrastFolderLoop(filepath):
       
       makeFolder('Strips')
       #plt.show()
-      plt.savefig(f'Strips/ContrastImgStrip_{base_name}.png')
+      plt.savefig(f'{destFilePath}/ContrastImgStrip_{base_name}.png')
       plt.close(f)
 
-def contrastAnalysis(filepath, file):
+def contrastAnalysis(filepath, file, destFilePath):
   image = readFromFile(filepath, file)
 
   HSV_Contrast = []
@@ -61,5 +62,5 @@ def contrastAnalysis(filepath, file):
   
   makeFolder('Strips')
   #plt.show()
-  plt.savefig(f'Strips/ContrastImgStrip_{base_name}.png')
+  plt.savefig(f'{destFilePath}/ContrastImgStrip_{base_name}.png')
   plt.close(f)
