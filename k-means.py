@@ -9,10 +9,11 @@ from Functions.maskFunctions import HSVskinMask
 from Functions.ImgAnalysisFunctions import k_means
 
 img_title = ['Image','k-Means','Hyper','Normal']
-filepath = 'Manual_Crop'
+filepath = 'NewCropped'
 #file = 'IR018.jpg'
+destFolderPath = 'OutputFolder\\k-means_N_Crp'
 
-def k_meansFolder(filepath):
+def k_meansFolder(filepath, destFolderPath):
     for file in os.listdir(filepath):
         imagebgr = readFromFile(filepath, file)
 
@@ -50,7 +51,7 @@ def k_meansFolder(filepath):
 
         # Display the image
         #showfilmStripPlot(img_title, imgArray, 5, centreDeets, f'{file.split(".")[0]}')
-        filmStripPlot(img_title,imgArray,4,'k-means_M_Crp',file)
+        filmStripPlot(img_title,imgArray,4,f'{destFolderPath}',file)
 
 def k_meansFile(filepath, file):
     imagebgr = readFromFile(filepath, file)
@@ -86,4 +87,4 @@ def k_meansFile(filepath, file):
     #filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
 
 
-k_meansFolder(filepath)
+k_meansFolder(filepath, destFolderPath)

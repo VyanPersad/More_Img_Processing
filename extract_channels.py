@@ -280,7 +280,7 @@ nryb = ""
 hxyz = ""
 nxyz = ""
 
-filepath = 'Manual_Crop'
+filepath = 'NewCropped'
 
 for file in os.listdir(f'{filepath}'):    
     imagebgr = readFromFile(filepath, file)   
@@ -337,7 +337,7 @@ for file in os.listdir(f'{filepath}'):
     hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
     normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
     
-    write_to_csv('hyperData_channels_frm_ Man_Crp.csv', hyper_names, hyperData)
-    write_to_csv('normalData_channels_frm_ Man_Crp.csv', normal_names, normalData)
+    write_to_csv('hyperData_channels_frm_ New_Crp.csv', hyper_names, hyperData)
+    write_to_csv('normalData_channels_frm_ New_Crp.csv', normal_names, normalData)
     
    

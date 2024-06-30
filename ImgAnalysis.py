@@ -21,7 +21,7 @@ for file in os.listdir(filepath):
     base_name = file.split(".")[0]
     f, filmPlot = plt.subplots(1,4, figsize=(10,5))
     plt.suptitle(f'{base_name}', x=0.05, y=0.9, ha='left', va='top')
-    for i in range (4):
+    for i in range (len(ImgTitles)):
         filmPlot[i].set_title(ImgTitles[i])
         if (i < 2):
             filmPlot[i].imshow(cv2.cvtColor(grayHistogram[i], cv2.COLOR_BGR2RGB))

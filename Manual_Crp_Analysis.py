@@ -6,9 +6,10 @@ import os
 from Functions.fileFunctions import *
 from Functions.ImgAnalysisFunctions import *
 
-filepath = 'Manual_Crop'
+filepath = 'NewCropped'
 #file = 'IR017.jpg'
-destFolderPath = 'OutputFolder/Manual_Crp_Analysis'
+destFolderPath = 'OutputFolder/Manual_N_Crp_Analysis'
+filePrefix = 'new_Crp'
 
 for file in os.listdir(filepath):
     image = readFromFile(filepath, file)
@@ -35,6 +36,6 @@ for file in os.listdir(filepath):
     
     plt.tight_layout()
     makeFolder(destFolderPath)
-    plt.savefig(f'{destFolderPath}/ManualCrp_fStrip_{base_name}.png')
+    plt.savefig(f'{destFolderPath}/{filePrefix}_{base_name}.png')
     #plt.show()
     plt.close(f)

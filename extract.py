@@ -5,9 +5,10 @@ import cv2
 import numpy as np
 import csv
 
-for file in os.listdir('CroppedImgs/'):
+filename = 'NewCropped'
+for file in os.listdir(filename):
         
-    file_path = f'CroppedImgs/{file}'
+    file_path = f'{filename}/{file}'
     img = cv2.imread(file_path)
     base_name = file.split("_")[0]
     gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -34,7 +35,7 @@ for file in os.listdir('CroppedImgs/'):
 
     header_names = ['Basename','Contrast', 'Dissimilarity','Homogeneity','Energy','Correlation','ASM']
 
-    csv_file_path = 'data.csv'
+    csv_file_path = 'new_Crp_glcm_data.csv'
     file_exists = os.path.exists(csv_file_path)
 
     with open(csv_file_path, mode='a', newline='') as file:
