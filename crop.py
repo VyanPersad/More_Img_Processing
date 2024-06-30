@@ -7,7 +7,8 @@ from Functions.maskFunctions import *
 from Functions.fileFunctions import *
 
 filepath = 'Originals/'
-def cropFolder(filepath):
+destFilePath = ''
+def cropFolder(filepath, destFilePath):
   for file in os.listdir(filepath):
       image = readFromFile(filepath, file)
 
@@ -42,12 +43,12 @@ def cropFolder(filepath):
         
       plt.tight_layout()
       
-      makeFolder('ImageStrips')
+      makeFolder(destFilePath)
       #plt.show()
-      plt.savefig(f'ImageStrips/ImgStrip_{base_name}.png')
+      plt.savefig(f'{destFilePath}/ImgStrip_{base_name}.png')
       plt.close(f)
 
-def cropFile(filepath, file):
+def cropFile(filepath, file, destFilePath):
   image = readFromFile(filepath, file)
 
   crppd_img_HSV_1 = HSVskinMask(image,[20,255,255],[3,15,10])
@@ -81,7 +82,7 @@ def cropFile(filepath, file):
     
   plt.tight_layout()
   
-  makeFolder('ImageStrips')
+  makeFolder(destFilePath)
   #plt.show()
-  plt.savefig(f'ImageStrips/ImgStrip_{base_name}.png')
+  plt.savefig(f'{destFilePath}/ImgStrip_{base_name}.png')
   plt.close(f)

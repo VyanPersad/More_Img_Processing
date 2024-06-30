@@ -7,6 +7,7 @@ from Functions.maskFunctions import *
 from Functions.fileFunctions import *
 
 filepath = 'Originals'
+destFilePath = ''
 
 for file in os.listdir(filepath):
 
@@ -34,7 +35,7 @@ for file in os.listdir(filepath):
 
     plt.tight_layout()
     
-    makeFolder('LABStrips')
+    makeFolder(destFilePath)
     #plt.show()
-    plt.savefig(f'LABStrips/LABImgStrip_{base_name}.png')
+    plt.savefig(f'{destFilePath}/LABImgStrip_{base_name}.png')
     plt.close(f)

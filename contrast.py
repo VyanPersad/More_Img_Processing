@@ -32,7 +32,7 @@ def contrastFolderLoop(filepath, destFilePath):
 
       plt.tight_layout()
       
-      makeFolder('Strips')
+      makeFolder(destFilePath)
       #plt.show()
       plt.savefig(f'{destFilePath}/ContrastImgStrip_{base_name}.png')
       plt.close(f)
@@ -60,7 +60,7 @@ def contrastAnalysis(filepath, file, destFilePath):
 
   plt.tight_layout()
   
-  makeFolder('Strips')
+  makeFolder(destFilePath)
   #plt.show()
   plt.savefig(f'{destFilePath}/ContrastImgStrip_{base_name}.png')
   plt.close(f)
