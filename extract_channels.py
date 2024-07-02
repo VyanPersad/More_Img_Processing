@@ -7,7 +7,7 @@ import math
 from statistics import mean
 from Functions.fileFunctions import write_to_csv
 from Functions.fileFunctions import readFromFile
-from Functions.ImgAnalysisFunctions import k_means
+from Functions.k_means import k_means
 
 RGB_SCALE = 255
 CMYK_SCALE = 100

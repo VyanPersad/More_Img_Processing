@@ -63,7 +63,6 @@ def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
     plt.close(f)
 
 def showfilmStripPlot(ImgTitles, ImgArray, Num, Text, figName='Custom Name'):
-
     #This will only produce a single row of images.
     #The conversion is because cv2 works in BGR
     #plt works in RGB

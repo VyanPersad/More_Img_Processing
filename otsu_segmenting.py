@@ -77,7 +77,7 @@ img_files_adaptive_otsu = []
 imgs_to_disp = []
 img_title = ['Img','Binary','Normal','Hyper']
 #f, plot = plt.subplots(5, 4)
-f, customPlot = plt.subplots(2, 2)
+f, customPlot = plt.subplots(1, 4)
 # plt.subplot(row, column)
 
 '''
@@ -86,50 +86,48 @@ f, customPlot = plt.subplots(2, 2)
     1 x x x x  4
     2 x x x x  8   
 '''
-
-for file in os.listdir('CroppedImgs/'):
+filepath = 'OutputFolder\\CrppdImg_HSV_Set_1'
+file = 'IR005_HSV_1_C.png'
         
-    file_path = f'CroppedImgs/{file}'
-    #print(file_path)
-    img = cv2.imread(file_path)
-    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+file_path = f'{filepath}/{file}'
+#print(file_path)
+img = cv2.imread(file_path)
+gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # otsu threshold seperation of hyper and normal pigmentation   
-    # otsu with adaptive thresholding
-    # The block_size determines the overall area around the pixel over
-    # which the average or weighted average will be calculated.
-    # A larger block is good for regions with lighting changes.
-    # A smaller block is good for high or fine detail regions.
-    # The C param thast is sibtracted from the average
-    # Allows for adjustement of the threshold value based on brightness.
-    # C +ve -> conservative threshold, shift toward darker region
-    # C -ve -> permissive threshold, shift toward lighter region
-    otsu_threshold, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    block_size = 11
-    C = 1
-    binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
+# otsu threshold seperation of hyper and normal pigmentation   
+# otsu with adaptive thresholding
+# The block_size determines the overall area around the pixel over
+# which the average or weighted average will be calculated.
+# A larger block is good for regions with lighting changes.
+# A smaller block is good for high or fine detail regions.
+# The C param thast is sibtracted from the average
+# Allows for adjustement of the threshold value based on brightness.
+# C +ve -> conservative threshold, shift toward darker region
+# C -ve -> permissive threshold, shift toward lighter region
+otsu_threshold, binary_image = cv2.threshold(gray_image, 125, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    normal = cv2.bitwise_and(img, img, mask=binary_image)
-    hyper = cv2.bitwise_and(img, img, mask=~binary_image)
+block_size = 11
+C = 1
+binary_image_w_adapt = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, C)
 
-    normal_a = cv2.bitwise_and(img, img, mask=binary_image_w_adapt)
-    hyper_a = cv2.bitwise_and(img, img, mask=~binary_image_w_adapt)
-    # This builds the number of columns. 
-    
-    imgs_to_disp.append(normal)
-    imgs_to_disp.append(hyper)
+normal = cv2.bitwise_and(img, img, mask=binary_image)
+hyper = cv2.bitwise_and(img, img, mask=~binary_image)
 
-    imgs_to_disp.append(normal_a)
-    imgs_to_disp.append(hyper_a)
+normal_a = cv2.bitwise_and(img, img, mask=binary_image_w_adapt)
+hyper_a = cv2.bitwise_and(img, img, mask=~binary_image_w_adapt)
+# This builds the number of columns. 
+
+imgs_to_disp.append(normal)
+imgs_to_disp.append(hyper)
+
+imgs_to_disp.append(normal_a)
+imgs_to_disp.append(hyper_a)
 
 for img in imgs_to_disp:
-    customPlot[0,0].set_title(img_title[2])
-    customPlot[0,0].imshow(imgs_to_disp[8])
-    customPlot[0,1].set_title(img_title[3])
-    customPlot[0,1].imshow(imgs_to_disp[9])
-    customPlot[1,0].imshow(imgs_to_disp[10])
-    customPlot[1,1].imshow(imgs_to_disp[11])
+    customPlot[0].imshow(cv2.cvtColor(imgs_to_disp[0], cv2.COLOR_BGR2RGB))
+    customPlot[1].imshow(cv2.cvtColor(imgs_to_disp[1], cv2.COLOR_BGR2RGB))
+    customPlot[2].imshow(cv2.cvtColor(imgs_to_disp[2], cv2.COLOR_BGR2RGB))
+    customPlot[3].imshow(cv2.cvtColor(imgs_to_disp[2], cv2.COLOR_BGR2RGB))
 
 plt.show()    
 

@@ -6,12 +6,25 @@ import matplotlib.pyplot as plt
 from statistics import mean
 from Functions.fileFunctions import *
 from Functions.maskFunctions import HSVskinMask
-from Functions.ImgAnalysisFunctions import k_means
 
 img_title = ['Image','k-Means','Hyper','Normal']
 filepath = 'NewCropped'
 #file = 'IR018.jpg'
 destFolderPath = 'OutputFolder\\k-means_N_Crp'
+
+def k_means(image, k=3):
+    pxl_val = image.reshape((-1,3))
+    pxl_val = np.float32(pxl_val)
+    #print(pxl_val.shape)
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.2)
+    k = 3
+    _, labels, (centers) = cv2.kmeans(pxl_val, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    centers = np.uint8(centers)
+    labels = labels.flatten()
+    segmented_image = centers[labels.flatten()]
+    segmented_image = segmented_image.reshape(image.shape)
+    #Remember the center are output as bgr
+    return segmented_image, centers
 
 def k_meansFolder(filepath, destFolderPath):
     for file in os.listdir(filepath):
@@ -85,6 +98,3 @@ def k_meansFile(filepath, file):
     # Display the image
     showfilmStripPlot(img_title, imgArray, 5, centreDeets, f'{file.split(".")[0]}')
     #filmStripPlot(img_title,imgArray,5,'k-means_filmStrips',file)
-
-
-k_meansFolder(filepath, destFolderPath)
