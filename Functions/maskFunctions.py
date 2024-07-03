@@ -1,6 +1,15 @@
 import numpy as np
 import cv2
 
+def skinMask(image, upper=[20,255,255], lower=[3,15,10]):
+    lower = np.array(lower, dtype="uint8")
+    upper = np.array(upper, dtype="uint8")
+
+    converted = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    skinMask = cv2.inRange(converted, lower, upper)
+    
+    return skinMask
+
 def shadowMsk(image, upper=[180,50,15], lower=[0,0,0]):
     #Shadow Mask
     #Upper - 180, 50, 15
