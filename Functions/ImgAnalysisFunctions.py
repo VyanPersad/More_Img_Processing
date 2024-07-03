@@ -410,3 +410,21 @@ def imgAnalysisFolder(filepath, saveState, destFolderPath = None):
         plt.savefig(f'{destFolderPath}/Img_Strip_{base_name}.png')
         
     plt.close(f)
+
+def k_Hist(filepath, file):
+    k_Array = []
+    image = readFromFile(filepath, file)
+
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            pxl_val = image[i,j]
+            max_val = max(pxl_val)
+            max_val_pr = max_val/255
+            k = 1-max_val_pr
+            k_Array.append(round(k,4))
+
+    plt.hist(k_Array)
+    plt.ylabel('Frequency')
+    plt.title('k Histogram')
+    #plt.show()
+    return plt.hist(k_Array)
