@@ -36,6 +36,17 @@ def readFromFile(filepath, file):
     #This image is output as BGR
     return image
     
+def readFromFile_noResize(filepath, file):
+    #The file param can come from the increment of the directory loop
+    # for file in os.listdir(filepath) 
+    # construct the argument parse and parse the arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", help="path to the image file", default=f'{filepath}/{file}')                
+    args = vars(ap.parse_args())
+    image = cv2.imread(args["image"])    
+    #This image is output as BGR
+    return image
+
 def writeImgTofile(inputFilename,destFolderPath,fileSuffix,fileType,image):
     makeFolder(destFolderPath)
     #This will isolate the part of the filename 
@@ -62,16 +73,16 @@ def filmStripPlot(ImgTitles, ImgArray, Num, destFolderPath, file):
     plt.savefig(f'{destFolderPath}/filmStrip_{base_name}.png')
     plt.close(f)
 
-def showfilmStripPlot(ImgTitles, ImgArray, Num, Text, figName='Custom Name'):
+def showfilmStripPlot(ImgTitles, ImgArray, Text, figName='Custom Name'):
     #This will only produce a single row of images.
     #The conversion is because cv2 works in BGR
     #plt works in RGB
-    f, filmPlot = plt.subplots(1,Num, figsize=(10,5), num = figName)
+    f, filmPlot = plt.subplots(1,len(ImgTitles), figsize=(10,5), num = figName)
     plt.suptitle(f'{figName}', x=0.05, y=0.9, ha='left', va='top')
     plt.figtext(0.1, 0.05, Text, ha='left', va='bottom')
-    for i in range(Num):
+    for i in range(len(ImgTitles)):
         filmPlot[i].set_title(ImgTitles[i])
-        for j in range(Num):
+        for j in range(len(ImgTitles)):
             filmPlot[j].imshow(cv2.cvtColor(ImgArray[j], cv2.COLOR_BGR2RGB))
  
     plt.tight_layout()
