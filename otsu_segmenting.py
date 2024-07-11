@@ -86,8 +86,8 @@ f, customPlot = plt.subplots(1, 4)
     1 x x x x  4
     2 x x x x  8   
 '''
-filepath = 'OutputFolder\\CrppdImg_HSV_Set_1'
-file = 'IR005_HSV_1_C.png'
+filepath = 'TestPics'
+file = 'pic5.jpg'
         
 file_path = f'{filepath}/{file}'
 #print(file_path)

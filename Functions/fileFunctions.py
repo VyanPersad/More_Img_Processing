@@ -5,7 +5,7 @@ import csv
 import matplotlib.pyplot as plt
 
 def write_to_csv(output_file_path, fieldnames, data):
-    
+    #The fieldnames and data shuld be in an array form.
     file_exists = os.path.exists(output_file_path)
     with open(output_file_path, mode='a', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)  
