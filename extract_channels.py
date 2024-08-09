@@ -7,7 +7,7 @@ import math
 from statistics import mean
 from Functions.fileFunctions import write_to_csv
 from Functions.fileFunctions import readFromFile
-from Functions.k_means import k_means
+from Functions.ImgAnalysisFunctions import k_means
 
 RGB_SCALE = 255
 CMYK_SCALE = 100
@@ -280,11 +280,12 @@ nryb = ""
 hxyz = ""
 nxyz = ""
 
-filepath = 'NewCropped'
+filepath = 'Originals'
 
 for file in os.listdir(f'{filepath}'):    
     imagebgr = readFromFile(filepath, file)   
     segmented_crppd, center = k_means(imagebgr, 2)
+    base_name = file.split("_")[0]
     centArr = []
     # Centre Details
     for i in range(3):
@@ -330,14 +331,14 @@ for file in os.listdir(f'{filepath}'):
     allData = [{'HCMYK': hcmyk, 'NCMYK': ncmyk, 'HLAB': hlab, 'NLAB': nlab, 'HHSV':hhsv, 'NHSV':nhsv, 
                 'HLUM':hlum, 'NLUM':nlum, 'HTEMP':htemp, 'NTEMP':ntemp, 'HRYB': hryb, 'NRYB': nryb, 'HXYZ': hxyz, 'NXYZ':nxyz}]
 
-    hyperData = [{'HCMYK': hcmyk, 'HLAB': hlab,'HHSV':hhsv, 'HLUM':hlum,'HTEMP':htemp, 'HRYB': hryb, 'HXYZ': hxyz}]
-    normalData = [{'NCMYK': ncmyk,'NLAB': nlab,'NHSV':nhsv, 'NLUM':nlum,'NTEMP':ntemp, 'NRYB': nryb, 'NXYZ':nxyz}]
+    hyperData = [{'Basename':base_name, 'HCMYK': hcmyk, 'HLAB': hlab,'HHSV':hhsv, 'HLUM':hlum,'HTEMP':htemp, 'HRYB': hryb, 'HXYZ': hxyz}]
+    normalData = [{'Basename':base_name, 'NCMYK': ncmyk,'NLAB': nlab,'NHSV':nhsv, 'NLUM':nlum,'NTEMP':ntemp, 'NRYB': nryb, 'NXYZ':nxyz}]
     
-    header_names = ['HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
-    hyper_names = ['HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
-    normal_names = ['NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
+    header_names = ['Basename', 'HCMYK', 'NCMYK', 'HLAB', 'NLAB', 'HHSV', 'NHSV', 'HLUM', 'NLUM', 'HTEMP', 'NTEMP', 'HRYB', 'NRYB', 'HXYZ','NXYZ']
+    hyper_names = ['Basename', 'HCMYK','HLAB','HHSV', 'HLUM','HTEMP','HRYB','HXYZ',]
+    normal_names = ['Basename', 'NCMYK','NLAB','NHSV', 'NLUM','NTEMP','NRYB','NXYZ']
     
-    write_to_csv('hyperData_channels_frm_ New_Crp.csv', hyper_names, hyperData)
-    write_to_csv('normalData_channels_frm_ New_Crp.csv', normal_names, normalData)
+    write_to_csv('hyperData_channels_frm_ New_Crp2.csv', hyper_names, hyperData)
+    write_to_csv('normalData_channels_frm_ New_Crp2.csv', normal_names, normalData)
     
    
