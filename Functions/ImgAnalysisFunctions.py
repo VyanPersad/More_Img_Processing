@@ -18,7 +18,7 @@ def k_means(image, k=3):
     labels = labels.flatten()
     segmented_image = centers[labels.flatten()]
     segmented_image = segmented_image.reshape(image.shape)
-    #Remember the center are output as bgr
+    #Remember the center points are output as bgr
     return segmented_image, centers
 
 def k_meansFolder(filepath, destFolderPath):
